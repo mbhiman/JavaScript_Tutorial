@@ -1,4 +1,3 @@
-cat > /mnt/user-data/outputs/02-variables-and-hoisting.md << 'EOF'
 # Variables, Hoisting, and the Temporal Dead Zone
 
 > 🧠 **Quick Recall (30-sec refresher)**
@@ -6,7 +5,7 @@ cat > /mnt/user-data/outputs/02-variables-and-hoisting.md << 'EOF'
 > - `var` → allocated **and** initialized to `undefined`. `let`/`const` → allocated but **not** initialized (the TDZ) — even if an outer variable with the same name already exists, the local one shadows and blocks it from the top of its scope.
 > - Function **declarations** are hoisted whole (callable early). Function **expressions** — `var x = function(){}`, `const x = () => {}`, any arrow function — follow their variable keyword's rules instead.
 
-**Tags:** #fundamentals #hoisting #tdz #var #let #const #scope-shadowing · **Interview Frequency:** 🔴 High · **Last Reviewed:** 2026-07-31
+**Tags:** #fundamentals #hoisting #tdz #var #let #const #scope-shadowing · **Interview Frequency:** 🔴 High · **Last Reviewed:** 2026-08-01
 
 ---
 
@@ -91,18 +90,23 @@ graph TD
 ## Common Interview Questions
 
 **Q: Are `let` and `const` hoisted?**
+
 A: Yes — both are fully hoisted in the Memory Creation Phase, so the engine knows they exist before execution starts. Unlike `var`, they aren't initialized to `undefined`; they sit in the TDZ until execution reaches their declaration line.
 
 **Q: Why did ES6 introduce the Temporal Dead Zone?**
+
 A: To turn a silent bug into a loud one. `var` accessed too early just returns `undefined`, quietly hiding the mistake. The TDZ throws a `ReferenceError` instead, forcing it to surface immediately.
 
 **Q: In the shadowing example, why does `console.log(colleague)` throw instead of printing the outer `"Harish"`?**
+
 A: The function has its own local `let colleague`, hoisted (in TDZ) for the whole function scope from the top. JS finds that local binding first and stops looking — it never falls through to the outer scope, TDZ or not.
 
 **Q: Why does calling an arrow function before its `var` assignment throw `TypeError` instead of `ReferenceError`?**
+
 A: An arrow function assigned to a `var` is a function *expression*, not a declaration — only the name is hoisted (as `undefined`), not the function body. Calling `undefined()` is what actually throws, and that's a `TypeError`.
 
 **Q: What happens if you assign to a variable you never declared (e.g. `score = 100`)?**
+
 A: In non-strict mode, JS creates an implicit global property on the global object — legal, but bad practice. In strict mode, it throws `ReferenceError: score is not defined`. Either way, it was never hoisted, because hoisting only applies to actual declarations.
 
 ## Gotchas / Common Misconceptions
